@@ -28,7 +28,7 @@ Each argument after `a` or `analyze` is treated as a separate glob pattern, so y
 eol-tools a ./src/**/*.ts ./dist/**/*.js
 ```
 
-It will print out the results and indicate one of five possible stats:
+It will print out the results and indicate one of five possible states:
 - None: there were no line endings detected at all, so the EOL type could not be determined. This typically happens on empty files
 - UNIX: all EOL markings are `\n`
 - Windows: all EOL markings are `\r\n`
