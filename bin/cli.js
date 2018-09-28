@@ -1,10 +1,8 @@
-# EOL Tools
-
-A set of tools for working with EOL markings in files.
-
-# License
-
+#!/usr/bin/env node
+/*
 Copyright (c) 2018 Bryan Hughes <bryan@nebri.us>
+
+This file is part of EOL Tools.
 
 EOL Tools is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,3 +16,24 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with EOL Tools.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+const program = require('commander');
+const { run: runAnalzye } = require('../src/analyze');
+
+const { version } = require('../package.json');
+
+program
+  .version(version)
+  .arguments('<analyze> [pattern...]', 'Searches all files specified and prints their EOL status', { isDefault: true })
+  .parse(process.argv);
+
+const [ command, ...args ] = program.args;
+switch(command) {
+  case 'a':
+  case 'analyze':
+    runAnalzye(args);
+    break;
+  default:
+    console.error(`Unknown command "${command}"`);
+}

@@ -1,0 +1,30 @@
+{
+  "name": "eol-tools",
+  "version": "1.0.0",
+  "description": "A set of tools for working with EOL markings in files",
+  "main": "index.js",
+  "bin": {
+    "eol-tools": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nebrius/eol-tools.git"
+  },
+  "keywords": [
+    "EOL"
+  ],
+  "author": "Bryan Hughes <bryan@nebri.us>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nebrius/eol-tools/issues"
+  },
+  "homepage": "https://github.com/nebrius/eol-tools#readme",
+  "dependencies": {
+    "async": "^2.6.1",
+    "commander": "^2.18.0",
+    "glob": "^7.1.3"
+  }
+}
