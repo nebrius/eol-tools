@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with EOL Tools.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { readFile } = require('fs');
+const { readFile, stat } = require('fs');
 const { parallel } = require('async');
 const { sync: globSync } = require('glob');
 
@@ -38,24 +38,33 @@ function countCharacters(string, character) {
 }
 
 function analyzeFile(file, cb) {
-  readFile(file, 'utf8', (err, data) => {
+  stat(file, (err, stats) => {
     if (err) {
       cb(err);
       return;
+    } else if (stats.isDirectory()) {
+      cb();
+      return;
     }
-    let numLineFeeds = countCharacters(data, '\n');
-    let numCarriageReturns = countCharacters(data, '\r');
-    if (numLineFeeds === 0 && numCarriageReturns === 0) {
-      cb(undefined, NONE);
-    } else if (numLineFeeds !== 0 && numCarriageReturns === 0) {
-      cb(undefined, UNIX);
-    } else if (numLineFeeds !== 0 && numCarriageReturns === numLineFeeds) {
-      cb(undefined, WINDOWS);
-    } else if (numLineFeeds !== 0 && numCarriageReturns !== numLineFeeds) {
-      cb(undefined, MIXED);
-    } else if (numLineFeeds === 0 && numCarriageReturns !== 0) {
-      cb(undefined, APPLE);
-    }
+    readFile(file, 'utf8', (err, data) => {
+      if (err) {
+        cb(err);
+        return;
+      }
+      let numLineFeeds = countCharacters(data, '\n');
+      let numCarriageReturns = countCharacters(data, '\r');
+      if (numLineFeeds === 0 && numCarriageReturns === 0) {
+        cb(undefined, NONE);
+      } else if (numLineFeeds !== 0 && numCarriageReturns === 0) {
+        cb(undefined, UNIX);
+      } else if (numLineFeeds !== 0 && numCarriageReturns === numLineFeeds) {
+        cb(undefined, WINDOWS);
+      } else if (numLineFeeds !== 0 && numCarriageReturns !== numLineFeeds) {
+        cb(undefined, MIXED);
+      } else if (numLineFeeds === 0 && numCarriageReturns !== 0) {
+        cb(undefined, APPLE);
+      }
+    });
   });
 }
 
