@@ -35,6 +35,29 @@ It will print out the results and indicate one of five possible states:
 - Apple: all EOL markings are `\r` (where did you find this relic?)
 - Mixed: there is a cominbination of different markings used in the file
 
+### Converting the line endings of files
+
+**WARNING:** this command is _not_ well tested. Since it's a destructive operation, be careful with it.
+
+You can normalize the line endings by running the following:
+
+```BASH
+eol-tools [c|convert] [-e windows|unix] [<glob pattern>...]
+```
+
+You can specify if you want UNIX-style line endings (`\n`, the default) or Windows-style line endings (`\r\n`) by using the `-e` flag.
+For example, to convert all JS and TS files to UNIX-style line endings, you would run:
+
+```BASH
+eol-tools c ./src/**/*.ts ./dist/**/*.js
+```
+
+or convert them to Windows-style line endings with:
+
+```BASH
+eol-tools c -e windows ./src/**/*.ts ./dist/**/*.js
+```
+
 # License
 
 Copyright (c) 2018 Bryan Hughes <bryan@nebri.us>

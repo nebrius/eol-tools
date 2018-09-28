@@ -21,11 +21,13 @@ const { readFile, stat } = require('fs');
 const { parallel } = require('async');
 const { sync: globSync } = require('glob');
 
-const NONE = 'NONE';
-const WINDOWS = 'WINDOWS';
-const UNIX = 'UNIX';
-const APPLE = 'APPLE';
-const MIXED = 'MIXED';
+const types = {
+  NONE: 'NONE',
+  WINDOWS: 'WINDOWS',
+  UNIX: 'UNIX',
+  APPLE: 'APPLE',
+  MIXED: 'MIXED'
+};
 
 function countCharacters(string, character) {
   let count = 0;
@@ -54,15 +56,15 @@ function analyzeFile(file, cb) {
       let numLineFeeds = countCharacters(data, '\n');
       let numCarriageReturns = countCharacters(data, '\r');
       if (numLineFeeds === 0 && numCarriageReturns === 0) {
-        cb(undefined, NONE);
+        cb(undefined, types.NONE);
       } else if (numLineFeeds !== 0 && numCarriageReturns === 0) {
-        cb(undefined, UNIX);
+        cb(undefined, types.UNIX);
       } else if (numLineFeeds !== 0 && numCarriageReturns === numLineFeeds) {
-        cb(undefined, WINDOWS);
+        cb(undefined, types.WINDOWS);
       } else if (numLineFeeds !== 0 && numCarriageReturns !== numLineFeeds) {
-        cb(undefined, MIXED);
+        cb(undefined, types.MIXED);
       } else if (numLineFeeds === 0 && numCarriageReturns !== 0) {
-        cb(undefined, APPLE);
+        cb(undefined, types.APPLE);
       }
     });
   });
@@ -95,7 +97,7 @@ function analyzeFiles(filePatterns, cb) {
   });
 }
 
-function run(filePatterns, cb) {
+function run(filePatterns) {
   analyzeFiles(filePatterns, (err, results) => {
     if (err) {
       console.error(err);
@@ -103,19 +105,19 @@ function run(filePatterns, cb) {
     }
     for (const filename in results) {
       switch (results[filename]) {
-        case NONE:
+        case types.NONE:
           console.log(`No line endings found in ${filename}`);
           break;
-        case UNIX:
+        case types.UNIX:
           console.log(`Detected UNIX line endings in ${filename}`);
           break;
-        case WINDOWS:
+        case types.WINDOWS:
           console.log(`Detected Windows line endings in ${filename}`);
           break;
-        case MIXED:
+        case types.MIXED:
           console.log(`Detected mixed UNIX and Windows line endings in ${filename}`);
           break;
-        case APPLE:
+        case types.APPLE:
           console.log(`Detected old school Apple line endings in ${filename}`);
           break;
       }
@@ -125,6 +127,7 @@ function run(filePatterns, cb) {
 
 module.exports = {
   run,
+  types,
   analyzeFile,
   analyzeFiles,
 }

@@ -20,19 +20,33 @@ along with EOL Tools.  If not, see <https://www.gnu.org/licenses/>.
 
 const program = require('commander');
 const { run: runAnalzye } = require('../src/analyze');
+const { run: runConvert } = require('../src/convert');
 
 const { version } = require('../package.json');
 
 program
   .version(version)
-  .arguments('<analyze> [pattern...]', 'Searches all files specified and prints their EOL status', { isDefault: true })
+  .arguments('<analyze|convert> [options] patterns...', '', { isDefault: true })
+  .option('-e, --eol [type]', 'sets the EOL type to convert to, either "windows" or "unix". Defaults to "unix', 'unix')
   .parse(process.argv);
 
-const [ command, ...args ] = program.args;
+const [ command, ...filePatterns ] = program.args;
+if (filePatterns.length === 0) {
+  console.error('You must supply at least one file pattern');
+  process.exit(-1);
+}
 switch(command) {
   case 'a':
   case 'analyze':
-    runAnalzye(args);
+    runAnalzye(filePatterns);
+    break;
+  case 'c':
+  case 'convert':
+    if (program.eol !== 'windows' && program.eol != 'unix') {
+      console.error(`Invalid EOL option "${program.eol}"`);
+      process.exit(-1);
+    }
+    runConvert(program.eol, filePatterns);
     break;
   default:
     console.error(`Unknown command "${command}"`);
