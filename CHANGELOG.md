@@ -1,3 +1,8 @@
+## 2.0.1 (2020-10-12)
+
+- Fixed crash when encountering a symlink
+- Fixed crash in convert when unable to detect line ending type
+
 ## 2.0.0 (2020-10-12)
 
 - Ripped out glob cause it wasn't working correctly

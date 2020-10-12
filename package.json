@@ -1,6 +1,6 @@
 {
   "name": "eol-tools",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A set of tools for working with EOL markings in files",
   "main": "index.js",
   "bin": {

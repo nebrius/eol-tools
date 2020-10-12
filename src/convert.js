@@ -70,7 +70,8 @@ function run(mode, filePatterns) {
         (mode === 'windows' && files[file] !== types.WINDOWS) ||
         (mode === 'unix' && files[file] !== types.UNIX)
       ) {
-        console.log(`Converting ${file} from ${files[file].toLowerCase()} line endings to ${mode} line endings`);
+        const sourceType = files[file] ? files[file].toLowerCase() : 'unknown';
+        console.log(`Converting ${file} from ${sourceType} line endings to ${mode} line endings`);
         filesToConvert.push(file);
       }
     }

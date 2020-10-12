@@ -77,8 +77,12 @@ function findFiles(directory) {
     const filepath = join(directory, content.name);
     if (content.isDirectory()) {
       files.push(...findFiles(filepath))
-    } else {
+    } else if (content.isFile()) {
       files.push(filepath);
+    } else if (content.isSymbolicLink()) {
+      console.log(`Skipping "${filepath}" because it's a symbolic link`);
+    } else {
+      console.log(`Skipping ${filepath} because it's not a directory, file, or symbolic link`);
     }
   }
   return files;
