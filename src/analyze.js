@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with EOL Tools.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const { readFile, stat } = require('fs');
+const { join } = require('path');
+const { readdirSync, readFile, stat } = require('fs');
 const { parallel } = require('async');
-const { sync: globSync } = require('glob');
 
 const types = {
   NONE: 'NONE',
@@ -70,13 +70,27 @@ function analyzeFile(file, cb) {
   });
 }
 
-function analyzeFiles(filePatterns, cb) {
-  const fileList = [];
-  if (!Array.isArray(filePatterns)) {
-    filePatterns = [ filePatterns ];
+function findFiles(directory) {
+  const contents = readdirSync(directory, { withFileTypes: true });
+  const files = [];
+  for (const content of contents) {
+    const filepath = join(directory, content.name);
+    if (content.isDirectory()) {
+      files.push(...findFiles(filepath))
+    } else {
+      files.push(filepath);
+    }
   }
-  for (const filePattern of filePatterns) {
-    fileList.push(...globSync(filePattern).filter((file) => file.indexOf('node_modules') === -1));
+  return files;
+}
+
+function analyzeFiles(directories, cb) {
+  const fileList = [];
+  if (!Array.isArray(directories)) {
+    directories = [ directories ];
+  }
+  for (const directory of directories) {
+    fileList.push(...findFiles(directory).filter((file) => file.indexOf('node_modules') === -1));
   }
   const results = {};
   parallel(fileList.map((file) =>

@@ -19,13 +19,13 @@ At any time, you can run `eol-tools --help` to get help from the command line.
 You can use eol-tools to analyze the EOL markings of files and report back what they are, including mixed EOL usage and indeterminante usage:
 
 ```BASH
-eol-tools [a|analayze] [<glob pattern>...]
+eol-tools [a|analayze] [directory...]
 ```
 
-Each argument after `a` or `analyze` is treated as a separate glob pattern, so you can do things like this:
+Each argument after `a` or `analyze` is treated as a separate directory, so you can do things like this:
 
 ```BASH
-eol-tools a ./src/**/*.ts ./dist/**/*.js
+eol-tools a ./src ./dist
 ```
 
 It will print out the results and indicate one of five possible states:
@@ -42,25 +42,25 @@ It will print out the results and indicate one of five possible states:
 You can normalize the line endings by running the following:
 
 ```BASH
-eol-tools [c|convert] [-e windows|unix] [<glob pattern>...]
+eol-tools [c|convert] [-e windows|unix] [<directory>...]
 ```
 
 You can specify if you want UNIX-style line endings (`\n`, the default) or Windows-style line endings (`\r\n`) by using the `-e` flag.
-For example, to convert all JS and TS files to UNIX-style line endings, you would run:
+For example, to convert all files to UNIX-style line endings, you would run:
 
 ```BASH
-eol-tools c ./src/**/*.ts ./dist/**/*.js
+eol-tools c ./src ./dist
 ```
 
 or convert them to Windows-style line endings with:
 
 ```BASH
-eol-tools c -e windows ./src/**/*.ts ./dist/**/*.js
+eol-tools c -e windows ./src ./dist
 ```
 
 # License
 
-Copyright (c) 2018 Bryan Hughes <bryan@nebri.us>
+Copyright (c) Bryan Hughes <bryan@nebri.us>
 
 EOL Tools is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

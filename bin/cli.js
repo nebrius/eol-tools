@@ -26,19 +26,19 @@ const { version } = require('../package.json');
 
 program
   .version(version)
-  .arguments('<analyze|convert> [options] patterns...', '', { isDefault: true })
+  .arguments('<analyze|convert> [options] directories...', '', { isDefault: true })
   .option('-e, --eol [type]', 'sets the EOL type to convert to, either "windows" or "unix". Defaults to "unix', 'unix')
   .parse(process.argv);
 
-const [ command, ...filePatterns ] = program.args;
-if (filePatterns.length === 0) {
+const [ command, ...directories ] = program.args;
+if (directories.length === 0) {
   console.error('You must supply at least one file pattern');
   process.exit(-1);
 }
 switch(command) {
   case 'a':
   case 'analyze':
-    runAnalzye(filePatterns);
+    runAnalzye(directories);
     break;
   case 'c':
   case 'convert':
@@ -46,7 +46,7 @@ switch(command) {
       console.error(`Invalid EOL option "${program.eol}"`);
       process.exit(-1);
     }
-    runConvert(program.eol, filePatterns);
+    runConvert(program.eol, directories);
     break;
   default:
     console.error(`Unknown command "${command}"`);
