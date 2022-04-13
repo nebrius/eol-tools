@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/nebrius/eol-tools#readme",
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "commander": "^2.18.0"
   }
 }
